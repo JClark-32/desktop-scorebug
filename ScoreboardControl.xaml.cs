@@ -29,6 +29,7 @@ namespace Desktop_Scorebug_WPF
 
         private FootballScoreboard _scoreboard;
         private NascarTicker _ticker;
+        private DynamicScoreboardTest _scoreboardTest;
 
         public ScoreboardControl()
         {
@@ -75,6 +76,7 @@ namespace Desktop_Scorebug_WPF
             CreateButtonsFromJArray(["Testing"], [], "nascar", daySpread);
 
             CreateRefreshButton();
+            CreateTempButton();
         }
 
         private JArray getActiveArray(JArray namesArray, JArray eventsArray)
@@ -241,6 +243,36 @@ namespace Desktop_Scorebug_WPF
             }
         }
 
+        private void CreateTempButton()
+        {
+            if (MenuBar.Children.Count == 1)
+            {
+
+                Button button = new Button
+                {
+                    Name = "TestButton",
+                    Content = "Test",
+                    FontWeight = FontWeights.Bold,
+                    FontSize = 20,
+                    Margin = new Thickness(5),
+                    Padding = new Thickness(10),
+                    MaxWidth = 50,
+                    MinWidth = 20,
+                    Background = new SolidColorBrush(Color.FromRgb(50, 50, 50)),
+                    Foreground = Brushes.White,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Tag = "Test"
+                };
+
+                button.Click += (sender, e) =>
+                {
+                    TestClick();
+                };
+
+                MenuBar.Children.Add(button);
+            }
+        }
+
         private async void CreateButtonsFromJArray(JArray jsonArray, JArray eventsArray, string league, string date)
         {
             if (jsonArray.Count != 0)
@@ -382,6 +414,59 @@ namespace Desktop_Scorebug_WPF
                 }
             }
         }
+
+        private void TestClick()
+        {
+            
+                if (_scoreboard != null)
+                {
+                    _scoreboard.Close();
+                }
+                if (_ticker != null)
+                {
+                    _ticker.Close();
+                }
+                
+                _scoreboardTest = new DynamicScoreboardTest();
+                _scoreboardTest.Closed += (s, args) => _scoreboardTest = null;
+                _scoreboardTest.Show();
+                
+
+                Button closeButton = new Button
+                {
+                    Name = "closeButton",
+                    Content = "Close",
+                    Margin = new Thickness(5),
+                    Padding = new Thickness(10),
+                    MaxWidth = 500,
+                    MinWidth = 20,
+                    Background = new SolidColorBrush(Color.FromRgb(50, 50, 50)),
+                    Foreground = Brushes.White
+                };
+
+                if (MenuBar.Children.Count != 3)
+                {
+                    Debug.WriteLine(MenuBar.Children[0]);
+                    MenuBar.Children.Add(closeButton);
+                }
+
+                closeButton.Click += (sender, e) =>
+                {
+                    if (_scoreboard != null)
+                    {
+                        _scoreboard.Close();
+                    }
+                    if (_ticker != null)
+                    {
+                        _ticker.Close();
+                    }
+                    if (_scoreboardTest != null)
+                    {
+                        _scoreboardTest.Close();
+                    }
+                    MenuBar.Children.Remove(closeButton);
+                };
+            }
 
         private void RefreshClick()
         {
