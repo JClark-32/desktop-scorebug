@@ -1,1 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScorebugConfig>
+	<name>Default_Football</name>
+	<dimensions>
+		<height>112</height>
+		<width>1100</width>
+		<vert-allignment>Top</vert-allignment>
+	</dimensions>
+	<layers>
+		<layer1>
+			<name>layer1</name>
+			<image>TickerCustom-Background.png</image>
+			<h-allignment>Center</h-allignment>
+			<v-allignment>Center</v-allignment>
+			<height>112</height>
+			<width>1100</width>
+			<margin>0,0,0,0</margin>
+			<opacity>1</opacity>
+		</layer1>
+	</layers>
+</ScorebugConfig>
