@@ -106,20 +106,22 @@ namespace Desktop_Scorebug_WPF
                     continue;
 
                 var competitions = eventObj["competitions"] as JArray;
-                //if (competitors == null) continue;
+                if (competitions == null) continue;
 
                 var competition = competitions[0] as JObject;
-                //if (competition == null) continue;
+                if (competition == null) continue;
+                
                 var status = competition["status"] as JObject;
-                //if (status == null) continue;
+                if (status == null) continue;
+                
                 var type = status["type"] as JObject;
-                //if (type == null) continue;
-                Debug.WriteLine(type.ToString());
+                if (type == null) continue;
 
                 var completed = type["completed"].ToObject<bool>();
-                //if (completed == null) continue;
+                if (completed == null) continue;
+                
                 var gameState = type["state"].ToString();
-                //if (gameState == null) continue;
+                if (gameState == null) continue;
 
                 Debug.WriteLine("yo");
                 var finished = completed;
@@ -149,29 +151,29 @@ namespace Desktop_Scorebug_WPF
                     continue;
 
                 var competitions = eventObj["competitions"] as JArray;
-                //if (competitors == null) continue;
+                if (competitions == null) continue;
 
                 var competition = competitions[0] as JObject;
-                //if (competition == null) continue;
+                if (competition == null) continue;
 
                 var competitors = competition["competitors"] as JArray;
-                //if (competitors == null) continue;
+                if (competitors == null) continue;
 
                 var competitor1 = competitors[0] as JObject;
-                //if (competitor1 == null) continue;
+                if (competitor1 == null) continue;
 
                 var team1 = competitor1["team"] as JObject;
-                //if (team1 == null) continue;
+                if (team1 == null) continue;
 
                 var abbrv1 = team1["abbreviation"].ToString();
 
                 var competitor1Score = competitor1["score"].ToString();
 
                 var competitor2 = competitors[1] as JObject;
-                //if (competitor2 == null) continue;
+                if (competitor2 == null) continue;
 
                 var team2 = competitor2["team"] as JObject;
-                //if (team1 == null) continue;
+                if (team1 == null) continue;
 
                 var abbrv2 = team2["abbreviation"].ToString();
 
