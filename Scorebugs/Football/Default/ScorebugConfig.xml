@@ -36,7 +36,7 @@
 		</layer2>
 		<layer3>
 			<type>image</type>
-			<name>layer2</name>
+			<name>layer3</name>
 			<image>Ticker-TeamBackground 2.png</image>
 			<h-alignment>Center</h-alignment>
 			<v-alignment>Center</v-alignment>
@@ -47,5 +47,44 @@
 			<teamColor1>False</teamColor1>
 			<teamColor2>True</teamColor2>
 		</layer3>
+		<layer4>
+			<type>image</type>
+			<name>layer4</name>
+			<image>Ticker-ScoreBarShadow.png</image>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>112</height>
+			<width>1100</width>
+			<margin>0,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer4>
+		<layer5>
+			<type>text-name</type>
+			<name>layer5</name>
+			<team>1</team>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>72</height>
+			<width>122</width>
+			<margin>-525,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer5>
+		<layer6>
+			<type>text-name</type>
+			<name>layer6</name>
+			<team>2</team>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>72</height>
+			<width>122</width>
+			<margin>525,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer6>
 	</layers>
 </ScorebugConfig>

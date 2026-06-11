@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using System.Security.Policy;
 using System.Xml;
+using System.Windows.Controls.Primitives;
 
 namespace Desktop_Scorebug_WPF
 {
@@ -27,6 +28,9 @@ namespace Desktop_Scorebug_WPF
         string urlDate;
         string gameName;
         string league;
+        string team1name = "blu";
+        string team2name = "red";
+
         XmlDocument ScoreBugConfig = new XmlDocument();
         
         private DispatcherTimer _timer;
@@ -128,6 +132,57 @@ namespace Desktop_Scorebug_WPF
                         var TeamColor1 = System.Drawing.ColorTranslator.FromHtml("#FF0000");
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
+                }
+                if (type == "text-name")
+                {
+                    string name = layer.SelectSingleNode("name").InnerText;
+                    int team = int.Parse(layer.SelectSingleNode("team").InnerText);
+                    string hAlignment = layer.SelectSingleNode("h-alignment").InnerText;
+                    string vAlignment = layer.SelectSingleNode("v-alignment").InnerText;
+                    int layerHeight = int.Parse(layer.SelectSingleNode("height").InnerText);
+                    int layerWidth = int.Parse(layer.SelectSingleNode("width").InnerText);
+                    string margin = layer.SelectSingleNode("margin").InnerText;
+                    double opacity = double.Parse(layer.SelectSingleNode("opacity").InnerText);
+                    bool colorTeam1 = bool.Parse(layer.SelectSingleNode("teamColor1").InnerText);
+                    bool colorTeam2 = bool.Parse(layer.SelectSingleNode("teamColor2").InnerText);
+
+                    string teamAbbreviation;
+
+                    string[] marginParts = margin.Split(',');
+
+                    Thickness marginThickness = new Thickness(
+                        int.Parse(marginParts[0]),
+                        int.Parse(marginParts[1]),
+                        int.Parse(marginParts[2]),
+                        int.Parse(marginParts[3]));
+
+                    if(team == 1)
+                    {
+                        teamAbbreviation = team1name;
+                    }
+                    else
+                    {
+                        teamAbbreviation = team2name;
+                    }
+
+                    TextBox textBox = new TextBox
+                    {
+                        Name = name,
+                        Width = layerWidth,
+                        Height = layerHeight,
+                        FontSize = layerHeight * 0.9,
+                        TextAlignment = TextAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        HorizontalContentAlignment = HorizontalAlignment.Left,
+                        Background = Brushes.Transparent,
+                        BorderBrush = Brushes.Transparent,
+                        Margin = marginThickness,
+                        Foreground = Brushes.White,
+                        FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Font/#Bebas Neue"),
+                        Text = teamAbbreviation,
+                    };
+
+                    RootGrid.Children.Add(textBox);
                 }
             }
         }
