@@ -502,7 +502,10 @@ namespace Desktop_Scorebug_WPF
             {
                 _ticker.Close();
             }
-
+            if (_scoreboardTest != null)
+            {
+                _scoreboardTest.Close();
+            }
         }
 
     }

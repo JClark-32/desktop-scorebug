@@ -45,8 +45,39 @@ namespace Desktop_Scorebug_WPF
 
             BugHeight = int.Parse(dimensions.SelectSingleNode("height").InnerText);
             BugWidth = int.Parse(dimensions.SelectSingleNode("width").InnerText);
-            VAlignment = VerticalAlignment.Top;
-            HAlignment = HorizontalAlignment.Center;
+
+            String _VAlign = dimensions.SelectSingleNode("v-alignment").InnerText;
+
+            if (_VAlign == "top")
+            {
+                VAlignment = VerticalAlignment.Top;
+            }
+            if (_VAlign == "bottom") {
+                VAlignment = VerticalAlignment.Bottom;
+            }
+            else
+            {
+                VAlignment = VerticalAlignment.Center;
+            }
+
+            String _HAlign = dimensions.SelectSingleNode("h-alignment").InnerText;
+
+            if (_HAlign == "left")
+            {
+                HAlignment = HorizontalAlignment.Left;
+            }
+            if (_HAlign == "right")
+            {
+                HAlignment = HorizontalAlignment.Right;
+            }
+            else
+            {
+                HAlignment = HorizontalAlignment.Center;
+            }
+            VerticalAlignment = VAlignment;
+            HorizontalAlignment = HAlignment;
+            Height = BugHeight;
+            Width = BugWidth;
 
             XmlNode layers = ScoreBugConfig.SelectSingleNode("ScorebugConfig/layers");
 
@@ -98,9 +129,7 @@ namespace Desktop_Scorebug_WPF
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
                 }
-
             }
-
         }
 
         protected override void OnClosed(EventArgs e)

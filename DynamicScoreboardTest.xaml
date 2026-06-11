@@ -12,7 +12,7 @@
         Top="0" Left="0"
         Background="Transparent"
         Loaded="Window_Loaded"
-        Title="Scoreboard" Height="112" Width="1100" VerticalAlignment="Top">
+        Title="Scoreboard">
     <Grid x:Name="RootGrid">
     </Grid>
 </local:Scoreboard>
