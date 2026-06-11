@@ -19,6 +19,11 @@ namespace Desktop_Scorebug_WPF
     public partial class DynamicScoreboardTest : Scoreboard
     {
 
+        public int BugHeight;
+        public int BugWidth;
+        public VerticalAlignment VAlignment;
+        public HorizontalAlignment HAlignment;
+
         string urlDate;
         string gameName;
         string league;
@@ -28,14 +33,61 @@ namespace Desktop_Scorebug_WPF
         public DynamicScoreboardTest()
         {
             InitializeComponent();
-            this.Loaded += Window_Loaded;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //base.OnContentRendered(e);
             string imageFileBase = "ActiveScorebugs/Football/Default/";
             ScoreBugConfig.Load("ActiveScorebugs/Football/Default/BugSetup.xml");
-            base.OnContentRendered(e);
+
+            XmlNode dimensions = ScoreBugConfig.SelectSingleNode("ScorebugConfig/dimensions");
+
+            BugHeight = int.Parse(dimensions.SelectSingleNode("height").InnerText);
+            BugWidth = int.Parse(dimensions.SelectSingleNode("width").InnerText);
+            VAlignment = VerticalAlignment.Top;
+            HAlignment = HorizontalAlignment.Center;
+
+            XmlNode layers = ScoreBugConfig.SelectSingleNode("ScorebugConfig/layers");
+
+            foreach (XmlNode layer in layers.ChildNodes)
+            {
+                string type = layer.SelectSingleNode("type").InnerText;
+                if (type == "image")
+                {
+                    string name = layer.SelectSingleNode("name").InnerText;
+                    string image = layer.SelectSingleNode("image").InnerText;
+                    string hAlignment = layer.SelectSingleNode("h-alignment").InnerText;
+                    string vAlignment = layer.SelectSingleNode("v-alignment").InnerText;
+                    int layerHeight = int.Parse(layer.SelectSingleNode("height").InnerText);
+                    int layerWidth = int.Parse(layer.SelectSingleNode("width").InnerText);
+                    string margin = layer.SelectSingleNode("margin").InnerText;
+                    double opacity = double.Parse(layer.SelectSingleNode("opacity").InnerText);
+
+                    Debug.WriteLine(imageFileBase + image);
+
+                    BitmapImage layerImage = new BitmapImage();
+                    layerImage.BeginInit();
+                    layerImage.UriSource = new Uri(System.IO.Path.GetFullPath(imageFileBase + image),UriKind.Absolute);
+                    layerImage.EndInit();
+
+                    Image imageObject = new Image
+                    {
+                        Name = name,
+                        Source = layerImage,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Height = layerHeight,
+                        Width = layerWidth,
+                        Opacity = opacity,
+
+                    };
+                    
+                    RootGrid.Children.Add(imageObject);
+                }
+
+            }
+
         }
 
         protected override void OnClosed(EventArgs e)

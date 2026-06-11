@@ -357,7 +357,7 @@ namespace Desktop_Scorebug_WPF
                             Foreground = Brushes.White
                         };
 
-                        if (MenuBar.Children.Count != 2)
+                        if (MenuBar.Children.Count != 3)
                         {
                             Debug.WriteLine(MenuBar.Children[0]);
                             MenuBar.Children.Add(closeButton);

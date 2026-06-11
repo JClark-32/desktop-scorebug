@@ -4,14 +4,16 @@
 	<dimensions>
 		<height>112</height>
 		<width>1100</width>
-		<vert-allignment>Top</vert-allignment>
+		<v-alignment>Top</v-alignment>
+		<h-alignment>Center</h-alignment>
 	</dimensions>
 	<layers>
 		<layer1>
+			<type>image</type>
 			<name>layer1</name>
 			<image>TickerCustom-Background.png</image>
-			<h-allignment>Center</h-allignment>
-			<v-allignment>Center</v-allignment>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
 			<height>112</height>
 			<width>1100</width>
 			<margin>0,0,0,0</margin>

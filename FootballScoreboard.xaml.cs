@@ -30,7 +30,7 @@ namespace Desktop_Scorebug_WPF
             this.league = league;
             InitializeComponent();
             InitializeTimer();
-            this.Loaded += Window_Loaded;
+            //this.Loaded += Window_Loaded;
         }
 
         private void InitializeTimer()
