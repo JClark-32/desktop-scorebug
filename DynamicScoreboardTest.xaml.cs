@@ -133,8 +133,9 @@ namespace Desktop_Scorebug_WPF
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
                 }
-                if (type == "text-name")
+                if (type == "text")
                 {
+                    string content = layer.SelectSingleNode("content").InnerText;
                     string name = layer.SelectSingleNode("name").InnerText;
                     int team = int.Parse(layer.SelectSingleNode("team").InnerText);
                     string hAlignment = layer.SelectSingleNode("h-alignment").InnerText;
@@ -145,8 +146,7 @@ namespace Desktop_Scorebug_WPF
                     double opacity = double.Parse(layer.SelectSingleNode("opacity").InnerText);
                     bool colorTeam1 = bool.Parse(layer.SelectSingleNode("teamColor1").InnerText);
                     bool colorTeam2 = bool.Parse(layer.SelectSingleNode("teamColor2").InnerText);
-
-                    string teamAbbreviation;
+                    string boxText = "";
 
                     string[] marginParts = margin.Split(',');
 
@@ -156,13 +156,16 @@ namespace Desktop_Scorebug_WPF
                         int.Parse(marginParts[2]),
                         int.Parse(marginParts[3]));
 
-                    if(team == 1)
+                    if (content == "name")
                     {
-                        teamAbbreviation = team1name;
-                    }
-                    else
-                    {
-                        teamAbbreviation = team2name;
+                        if (team == 1)
+                        {
+                            boxText = team1name;
+                        }
+                        else
+                        {
+                            boxText = team2name;
+                        }
                     }
 
                     TextBox textBox = new TextBox
@@ -179,7 +182,7 @@ namespace Desktop_Scorebug_WPF
                         Margin = marginThickness,
                         Foreground = Brushes.White,
                         FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Font/#Bebas Neue"),
-                        Text = teamAbbreviation,
+                        Text = boxText,
                     };
 
                     RootGrid.Children.Add(textBox);

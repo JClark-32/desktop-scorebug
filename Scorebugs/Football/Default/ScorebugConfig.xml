@@ -61,7 +61,8 @@
 			<teamColor2>False</teamColor2>
 		</layer4>
 		<layer5>
-			<type>text-name</type>
+			<type>text</type>
+			<content>name</content>
 			<name>layer5</name>
 			<team>1</team>
 			<h-alignment>Center</h-alignment>
@@ -74,7 +75,8 @@
 			<teamColor2>False</teamColor2>
 		</layer5>
 		<layer6>
-			<type>text-name</type>
+			<type>text</type>
+			<content>name</content>
 			<name>layer6</name>
 			<team>2</team>
 			<h-alignment>Center</h-alignment>
