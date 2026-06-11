@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScorebugConfig>
+	<name>Default_Football</name>
+	<dimensions>
+		<height>112</height>
+		<width>1100</width>
+		<v-alignment>Top</v-alignment>
+		<h-alignment>Center</h-alignment>
+	</dimensions>
+	<layers>
+		<layer1>
+			<type>image</type>
+			<name>layer1</name>
+			<image>TickerCustom-Background.png</image>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>112</height>
+			<width>1100</width>
+			<margin>0,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer1>
+		<layer2>
+			<type>image</type>
+			<name>layer2</name>
+			<image>Ticker-TeamBackground 1.png</image>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>112</height>
+			<width>1100</width>
+			<margin>0,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>True</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer2>
+		<layer3>
+			<type>image</type>
+			<name>layer2</name>
+			<image>Ticker-TeamBackground 2.png</image>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>112</height>
+			<width>1100</width>
+			<margin>0,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>True</teamColor2>
+		</layer3>
+	</layers>
+</ScorebugConfig>

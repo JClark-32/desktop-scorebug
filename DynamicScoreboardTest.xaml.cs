@@ -39,7 +39,7 @@ namespace Desktop_Scorebug_WPF
         {
             //base.OnContentRendered(e);
             string imageFileBase = "ActiveScorebugs/Football/Default/";
-            ScoreBugConfig.Load("ActiveScorebugs/Football/Default/BugSetup.xml");
+            ScoreBugConfig.Load("ActiveScorebugs/Football/Default/ScorebugConfig.xml");
 
             XmlNode dimensions = ScoreBugConfig.SelectSingleNode("ScorebugConfig/dimensions");
 
@@ -63,6 +63,8 @@ namespace Desktop_Scorebug_WPF
                     int layerWidth = int.Parse(layer.SelectSingleNode("width").InnerText);
                     string margin = layer.SelectSingleNode("margin").InnerText;
                     double opacity = double.Parse(layer.SelectSingleNode("opacity").InnerText);
+                    bool colorTeam1 = bool.Parse(layer.SelectSingleNode("teamColor1").InnerText);
+                    bool colorTeam2 = bool.Parse(layer.SelectSingleNode("teamColor2").InnerText);
 
                     Debug.WriteLine(imageFileBase + image);
 
@@ -84,6 +86,17 @@ namespace Desktop_Scorebug_WPF
                     };
                     
                     RootGrid.Children.Add(imageObject);
+
+                    if (colorTeam1)
+                    {
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml("#000DFF");
+                        RecolorImageWithAlpha(imageObject, TeamColor1);
+                    }
+                    if (colorTeam2)
+                    {
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml("#FF0000");
+                        RecolorImageWithAlpha(imageObject, TeamColor1);
+                    }
                 }
 
             }
