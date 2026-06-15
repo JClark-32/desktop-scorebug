@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -40,7 +41,7 @@ namespace Desktop_Scorebug_WPF
         {
             createButtons();
             this.Closed += OnParentWindowClosed;
-            
+            File.Copy("C:\\Users\\Jacob\\Desktop\\Desktop Scorebug WPF\\Desktop Scorebug WPF\\Scorebugs\\Football\\Default\\ScorebugConfig.xml", "ActiveScorebugs/Football/Default/ScorebugConfig.xml",true);
         }
 
         public string FirstLetterToUpper(string str)
