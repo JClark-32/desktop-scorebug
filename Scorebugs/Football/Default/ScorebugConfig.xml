@@ -88,5 +88,33 @@
 			<teamColor1>False</teamColor1>
 			<teamColor2>False</teamColor2>
 		</layer6>
+		<layer7>
+			<type>text</type>
+			<content>score</content>
+			<name>layer7</name>
+			<team>1</team>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>80</height>
+			<width>80</width>
+			<margin>-260,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer7>
+		<layer8>
+			<type>text</type>
+			<content>score</content>
+			<name>layer7</name>
+			<team>2</team>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>80</height>
+			<width>80</width>
+			<margin>260,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer8>
 	</layers>
 </ScorebugConfig>

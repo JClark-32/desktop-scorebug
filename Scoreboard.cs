@@ -285,7 +285,7 @@ namespace Desktop_Scorebug_WPF
             throw new InvalidOperationException("Unsupported image source type.");
         }
 
-        public void AddTextOutline(TextBox textBox, System.Windows.Media.Color outlineColor, double thickness = 1.5)
+        public void AddTextOutline(TextBox textBox, System.Windows.Media.Color outlineColor, double thickness)
         {
             textBox.Effect = new System.Windows.Media.Effects.DropShadowEffect
             {

@@ -30,6 +30,8 @@ namespace Desktop_Scorebug_WPF
         string league;
         string team1name = "blu";
         string team2name = "red";
+        int team1score = 32;
+        int team2score = 7;
 
         XmlDocument ScoreBugConfig = new XmlDocument();
         
@@ -167,6 +169,17 @@ namespace Desktop_Scorebug_WPF
                             boxText = team2name;
                         }
                     }
+                    if (content == "score")
+                    {
+                        if (team == 1)
+                        {
+                            boxText = team1score.ToString();
+                        }
+                        else
+                        {
+                            boxText = team2score.ToString();
+                        }
+                    }
 
                     TextBox textBox = new TextBox
                     {
@@ -184,6 +197,8 @@ namespace Desktop_Scorebug_WPF
                         FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Font/#Bebas Neue"),
                         Text = boxText,
                     };
+
+                    AddTextOutline(textBox, Colors.Black, 10.0);
 
                     RootGrid.Children.Add(textBox);
                 }
