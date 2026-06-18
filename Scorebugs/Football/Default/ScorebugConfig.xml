@@ -105,7 +105,7 @@
 		<layer8>
 			<type>text</type>
 			<content>score</content>
-			<name>layer7</name>
+			<name>layer8</name>
 			<team>2</team>
 			<h-alignment>Center</h-alignment>
 			<v-alignment>Center</v-alignment>
@@ -116,5 +116,19 @@
 			<teamColor1>False</teamColor1>
 			<teamColor2>False</teamColor2>
 		</layer8>
+		<layer9>
+			<type>text</type>
+			<content>clock</content>
+			<name>layer9</name>
+			<team>0</team>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<height>42</height>
+			<width>120</width>
+			<margin>0,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer9>
 	</layers>
 </ScorebugConfig>
