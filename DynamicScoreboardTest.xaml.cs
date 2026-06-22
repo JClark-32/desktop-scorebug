@@ -33,6 +33,8 @@ namespace Desktop_Scorebug_WPF
         int team1score = 32;
         int team2score = 7;
         string gameTime = "12:00";
+        string downs = "2nd and 1";
+        string quarter = "4th";
 
         XmlDocument ScoreBugConfig = new XmlDocument();
         
@@ -184,6 +186,14 @@ namespace Desktop_Scorebug_WPF
                     if (content == "clock")
                     {
                         boxText = gameTime;
+                    }
+                    if (content == "downs")
+                    {
+                        boxText = downs;
+                    }
+                    if (content == "quarter")
+                    {
+                        boxText = quarter;
                     }
 
                     TextBox textBox = new TextBox
