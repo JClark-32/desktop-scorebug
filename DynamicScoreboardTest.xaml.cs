@@ -28,13 +28,26 @@ namespace Desktop_Scorebug_WPF
         string urlDate;
         string gameName;
         string league;
+
+        //Text box inputs
         string team1name = "blu";
         string team2name = "red";
-        int team1score = 32;
-        int team2score = 7;
+        int team1score = 0;
+        int team2score = 0;
         string gameTime = "12:00";
         string downs = "2nd and 1";
         string quarter = "4th";
+        //End inputs
+
+        //Text box names
+        string team1NameBox;
+        string team2NameBox;
+        string team1ScoreBox;
+        string team2ScoreBox;
+        string gameTimeBox;
+        string downsBox;
+        string quarterBox;
+        //End names
 
         XmlDocument ScoreBugConfig = new XmlDocument();
         
@@ -166,10 +179,12 @@ namespace Desktop_Scorebug_WPF
                         if (team == 1)
                         {
                             boxText = team1name;
+                            team1NameBox = name;
                         }
                         else
                         {
                             boxText = team2name;
+                            team2NameBox = name;
                         }
                     }
                     if (content == "score")
@@ -177,23 +192,28 @@ namespace Desktop_Scorebug_WPF
                         if (team == 1)
                         {
                             boxText = team1score.ToString();
+                            team1ScoreBox = name;
                         }
                         else
                         {
                             boxText = team2score.ToString();
+                            team2ScoreBox = name;
                         }
                     }
                     if (content == "clock")
                     {
                         boxText = gameTime;
+                        gameTimeBox = name;
                     }
                     if (content == "downs")
                     {
                         boxText = downs;
+                        downsBox = name;
                     }
                     if (content == "quarter")
                     {
                         boxText = quarter;
+                        quarterBox = name;
                     }
 
                     TextBox textBox = new TextBox
