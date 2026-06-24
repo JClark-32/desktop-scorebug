@@ -259,9 +259,228 @@ namespace Desktop_Scorebug_WPF
             }
         }
 
-        private async void updateScoreboard()
+        private void buildScorebug()
         {
 
+        }
+
+        private async void updateScoreboard()
+        {
+            JArray events = await getEvents(urlDate, league);
+            string newPeriod = await getPeriod(gameName, events);
+            string newScoreHome = getScore(gameName, 1, events);
+            string newScoreAway = getScore(gameName, 0, events);
+            string newTime = getClock(gameName, events);
+            string newDowns = getDownDistance(gameName, events);
+            string posessionID = getPossession(gameName, events);
+
+
+        }
+
+        private async Task<JArray> getEvents(String urlDate, String league)
+        {
+            string url = "https://site.api.espn.com/apis/site/v2/sports/football/" + league + "/scoreboard?dates=" + urlDate;
+            JObject json = await getJsonfromEndpoint(url);
+            JArray array = (JArray)json["events"];
+            if (array == null)
+                return [];
+            return array;
+        }
+
+        private async Task<string?> getPeriod(String Matchup, JArray eventsArray)
+        {
+            string period = "";
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"] as JArray;
+                var competition = competitors[0] as JObject;
+                var status = competition["status"] as JObject;
+
+                //Debug.Print(status.ToString());
+
+                if (competitors == null) continue;
+
+                var periodJSON = status["period"];
+                if (periodJSON == null) continue;
+                int periodNUM = periodJSON.ToObject<int>();
+
+                switch (periodNUM)
+                {
+                    case 0:
+                        break;
+                    case <= 4:
+                        period = periodNUM + getEndNumberModifier(periodNUM);
+                        break;
+                    case 5:
+                        period = "OT";
+                        break;
+                    default:
+                        periodNUM = periodNUM - 4;
+                        period = (periodNUM) + getEndNumberModifier(periodNUM) + " OT";
+                        break;
+                }
+
+                break;
+            }
+            return period;
+        }
+
+        private string getScore(String Matchup, int Team, JArray eventsArray)
+        {
+            string score = "";
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"]?[0]?["competitors"] as JArray;
+                if (competitors == null) continue;
+
+                var team = competitors[Team]["score"];
+                if (team == null) continue;
+
+                //Debug.Print(team.ToString());
+
+                score = team.ToString();
+
+
+                break;
+            }
+            return score;
+        }
+
+        private string getClock(String Matchup, JArray eventsArray)
+        {
+            string clock = "";
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"] as JArray;
+                if (competitors == null) continue;
+
+                var competition = competitors[0] as JObject;
+                var status = competition["status"] as JObject;
+                var type = status["type"] as JObject;
+                var finished = type["completed"].ToObject<bool>();
+                var detail = type["detail"].ToString();
+
+                if (detail.Equals("Halftime"))
+                {
+                    clock = "HALF";
+                    break;
+                }
+
+                if (finished == true)
+                {
+                    clock = "FINAL";
+                    break;
+                }
+
+                //Debug.Print(status.ToString());
+
+                var displayClock = status["displayClock"];
+                if (displayClock == null) continue;
+
+                clock = displayClock.ToString();
+
+                break;
+            }
+            return clock;
+        }
+
+        private string getDownDistance(String Matchup, JArray eventsArray)
+        {
+            string DownDistance = "";
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                //Debug.WriteLine(name);
+                //Debug.WriteLine(Matchup);
+
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"] as JArray;
+                if (competitors == null) continue;
+
+                var competition = competitors[0] as JObject;
+
+                var status = competition["situation"] as JObject;
+                if (status == null) continue;
+
+                var downDistanceText = status["shortDownDistanceText"];
+                if (downDistanceText == null) continue;
+
+                DownDistance = downDistanceText.ToString();
+
+                break;
+            }
+            return DownDistance;
+        }
+
+        private string getPossession(String Matchup, JArray eventsArray)
+        {
+            string PossessionID = "";
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                //Debug.WriteLine(name);
+                //Debug.WriteLine(Matchup);
+
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"] as JArray;
+                if (competitors == null) continue;
+
+                var competition = competitors[0] as JObject;
+
+                var status = competition["situation"] as JObject;
+                if (status == null) continue;
+
+                var possessionText = status["possession"];
+                if (possessionText == null) continue;
+
+                PossessionID = possessionText.ToString();
+
+                break;
+            }
+            return PossessionID;
+        }
+
+        private string getEndNumberModifier(int number)
+        {
+            number = number % 10;
+            String modifier = "";
+            switch (number)
+            {
+                case 1:
+                    modifier = "st";
+                    break;
+                case 2:
+                    modifier = "nd";
+                    break;
+                case 3:
+                    modifier = "rd";
+                    break;
+                default:
+                    modifier = "th";
+                    break;
+            }
+            return modifier;
         }
 
         protected override void OnClosed(EventArgs e)
