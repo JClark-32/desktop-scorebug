@@ -52,7 +52,7 @@ namespace Desktop_Scorebug_WPF
         XmlDocument ScoreBugConfig = new XmlDocument();
         
         private DispatcherTimer _timer;
-        public DynamicScoreboardTest()
+        public DynamicScoreboardTest(string league, string gameName, string urlDate)
         {
             this.urlDate = urlDate;
             this.gameName = gameName;
@@ -76,7 +76,13 @@ namespace Desktop_Scorebug_WPF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            buildScorebug();
             //base.OnContentRendered(e);
+            
+        }
+
+        private void buildScorebug()
+        {
             string imageFileBase = "ActiveScorebugs/Football/Default/";
             ScoreBugConfig.Load("ActiveScorebugs/Football/Default/ScorebugConfig.xml");
 
@@ -91,7 +97,8 @@ namespace Desktop_Scorebug_WPF
             {
                 VAlignment = VerticalAlignment.Top;
             }
-            if (_VAlign == "bottom") {
+            if (_VAlign == "bottom")
+            {
                 VAlignment = VerticalAlignment.Bottom;
             }
             else
@@ -140,7 +147,7 @@ namespace Desktop_Scorebug_WPF
 
                     BitmapImage layerImage = new BitmapImage();
                     layerImage.BeginInit();
-                    layerImage.UriSource = new Uri(System.IO.Path.GetFullPath(imageFileBase + image),UriKind.Absolute);
+                    layerImage.UriSource = new Uri(System.IO.Path.GetFullPath(imageFileBase + image), UriKind.Absolute);
                     layerImage.EndInit();
 
                     Image imageObject = new Image
@@ -154,7 +161,7 @@ namespace Desktop_Scorebug_WPF
                         Opacity = opacity,
 
                     };
-                    
+
                     RootGrid.Children.Add(imageObject);
 
                     if (colorTeam1)
@@ -250,18 +257,13 @@ namespace Desktop_Scorebug_WPF
                         quarterBox = textBox;
                     }
 
-                    
+
 
                     AddTextOutline(textBox, Colors.Black, 10.0);
 
                     RootGrid.Children.Add(textBox);
                 }
             }
-        }
-
-        private void buildScorebug()
-        {
-
         }
 
         private async void updateScoreboard()
@@ -274,7 +276,20 @@ namespace Desktop_Scorebug_WPF
             string newDowns = getDownDistance(gameName, events);
             string posessionID = getPossession(gameName, events);
 
+            if (team1ScoreBox != null)
+                team1ScoreBox.Text = newScoreHome;
 
+            if (team2ScoreBox != null)
+                team2ScoreBox.Text = newScoreAway;
+
+            if (gameTimeBox != null)
+                gameTimeBox.Text = newTime;
+
+            if (downsBox != null)
+                downsBox.Text = newDowns;
+
+            if (quarterBox != null)
+                quarterBox.Text = newPeriod;
         }
 
         private async Task<JArray> getEvents(String urlDate, String league)

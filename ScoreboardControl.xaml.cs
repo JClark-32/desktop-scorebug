@@ -428,7 +428,7 @@ namespace Desktop_Scorebug_WPF
                     _ticker.Close();
                 }
                 
-                _scoreboardTest = new DynamicScoreboardTest();
+                _scoreboardTest = new DynamicScoreboardTest("college-football","Miami Hurricanes at Indiana Hoosiers", "20260119");
                 _scoreboardTest.Closed += (s, args) => _scoreboardTest = null;
                 _scoreboardTest.Show();
                 
