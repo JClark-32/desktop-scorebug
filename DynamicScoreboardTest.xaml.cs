@@ -40,13 +40,13 @@ namespace Desktop_Scorebug_WPF
         //End inputs
 
         //Text box names
-        string team1NameBox;
-        string team2NameBox;
-        string team1ScoreBox;
-        string team2ScoreBox;
-        string gameTimeBox;
-        string downsBox;
-        string quarterBox;
+        TextBox team1NameBox;
+        TextBox team2NameBox;
+        TextBox team1ScoreBox;
+        TextBox team2ScoreBox;
+        TextBox gameTimeBox;
+        TextBox downsBox;
+        TextBox quarterBox;
         //End names
 
         XmlDocument ScoreBugConfig = new XmlDocument();
@@ -174,48 +174,6 @@ namespace Desktop_Scorebug_WPF
                         int.Parse(marginParts[2]),
                         int.Parse(marginParts[3]));
 
-                    if (content == "name")
-                    {
-                        if (team == 1)
-                        {
-                            boxText = team1name;
-                            team1NameBox = name;
-                        }
-                        else
-                        {
-                            boxText = team2name;
-                            team2NameBox = name;
-                        }
-                    }
-                    if (content == "score")
-                    {
-                        if (team == 1)
-                        {
-                            boxText = team1score.ToString();
-                            team1ScoreBox = name;
-                        }
-                        else
-                        {
-                            boxText = team2score.ToString();
-                            team2ScoreBox = name;
-                        }
-                    }
-                    if (content == "clock")
-                    {
-                        boxText = gameTime;
-                        gameTimeBox = name;
-                    }
-                    if (content == "downs")
-                    {
-                        boxText = downs;
-                        downsBox = name;
-                    }
-                    if (content == "quarter")
-                    {
-                        boxText = quarter;
-                        quarterBox = name;
-                    }
-
                     TextBox textBox = new TextBox
                     {
                         Name = name,
@@ -232,6 +190,50 @@ namespace Desktop_Scorebug_WPF
                         FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Font/#Bebas Neue"),
                         Text = boxText,
                     };
+
+                    if (content == "name")
+                    {
+                        if (team == 1)
+                        {
+                            textBox.Text = team1name;
+                            team1NameBox = textBox;
+                        }
+                        else
+                        {
+                            textBox.Text = team2name;
+                            team2NameBox = textBox;
+                        }
+                    }
+                    if (content == "score")
+                    {
+                        if (team == 1)
+                        {
+                            textBox.Text = team1score.ToString();
+                            team1ScoreBox = textBox;
+                        }
+                        else
+                        {
+                            textBox.Text = team2score.ToString();
+                            team2ScoreBox = textBox;
+                        }
+                    }
+                    if (content == "clock")
+                    {
+                        textBox.Text = gameTime;
+                        gameTimeBox = textBox;
+                    }
+                    if (content == "downs")
+                    {
+                        textBox.Text = downs;
+                        downsBox = textBox;
+                    }
+                    if (content == "quarter")
+                    {
+                        textBox.Text = quarter;
+                        quarterBox = textBox;
+                    }
+
+                    
 
                     AddTextOutline(textBox, Colors.Black, 10.0);
 
