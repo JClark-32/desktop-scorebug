@@ -54,7 +54,24 @@ namespace Desktop_Scorebug_WPF
         private DispatcherTimer _timer;
         public DynamicScoreboardTest()
         {
+            this.urlDate = urlDate;
+            this.gameName = gameName;
+            this.league = league;
             InitializeComponent();
+            InitializeTimer();
+        }
+
+        private void InitializeTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(5);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            updateScoreboard();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -240,6 +257,11 @@ namespace Desktop_Scorebug_WPF
                     RootGrid.Children.Add(textBox);
                 }
             }
+        }
+
+        private async void updateScoreboard()
+        {
+
         }
 
         protected override void OnClosed(EventArgs e)
