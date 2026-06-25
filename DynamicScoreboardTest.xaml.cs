@@ -51,10 +51,21 @@ namespace Desktop_Scorebug_WPF
         TextBox quarterBox;
         //End text boxes
 
+        //Possession arrow
         Image possessionArrow;
         bool arrowRightDefault;
         Thickness arrowRightMargin;
         Thickness arrowLeftMargin;
+        //End Posession arros
+
+        //Time Outs
+        Image TimeOut11;
+        Image TimeOut12;
+        Image TimeOut13;
+
+        Image TimeOut21;
+        Image TimeOut22;
+        Image TimeOut23;
 
         XmlDocument ScoreBugConfig = new XmlDocument();
         
@@ -83,12 +94,12 @@ namespace Desktop_Scorebug_WPF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            buildScorebug();
+            buildScorebugAsync();
             //base.OnContentRendered(e);
             
         }
 
-        private void buildScorebug()
+        private async Task buildScorebugAsync()
         {
             string imageFileBase = "ActiveScorebugs/Football/Default/";
             ScoreBugConfig.Load("ActiveScorebugs/Football/Default/ScorebugConfig.xml");
@@ -173,12 +184,14 @@ namespace Desktop_Scorebug_WPF
 
                     if (colorTeam1)
                     {
-                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml("#000DFF");
+                        JArray Events = await getEvents(urlDate, league);
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 1, Events));
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
                     if (colorTeam2)
                     {
-                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml("#FF0000");
+                        JArray Events = await getEvents(urlDate, league);
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 0, Events));
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
                 }
@@ -226,12 +239,18 @@ namespace Desktop_Scorebug_WPF
                     {
                         if (team == 1)
                         {
-                            textBox.Text = team1name;
+                            JArray Events = await getEvents(urlDate, league);
+                            var teamAbr = getAbbreviation(gameName, 1, Events);
+
+                            textBox.Text = teamAbr;
                             team1NameBox = textBox;
                         }
                         else
                         {
-                            textBox.Text = team2name;
+                            JArray Events = await getEvents(urlDate, league);
+                            var teamAbr = getAbbreviation(gameName, 0, Events);
+
+                            textBox.Text = teamAbr;
                             team2NameBox = textBox;
                         }
                     }
@@ -586,6 +605,71 @@ namespace Desktop_Scorebug_WPF
             return clock;
         }
 
+        private string getTeamColor(string Matchup, int Team, JArray eventsArray)
+        {
+            string defaultColor = "#FFFFFF"; // fallback color
+            string color = defaultColor;
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"]?[0]?["competitors"] as JArray;
+                if (competitors == null) continue;
+
+                var team = competitors[Team]?["team"];
+                if (team == null) continue;
+
+                if (league.Equals("nfl"))
+                {
+                    string? baseColor = team["color"]?.ToString();
+                    color = !string.IsNullOrWhiteSpace(baseColor) ? $"#{baseColor}" : defaultColor;
+                }
+                else
+                {
+                    string? altColor = team["alternateColor"]?.ToString();
+                    if (!string.IsNullOrWhiteSpace(altColor))
+                    {
+                        color = $"#{altColor}";
+                    }
+                    else
+                    {
+                        string? baseColor = team["color"]?.ToString();
+                        color = !string.IsNullOrWhiteSpace(baseColor) ? $"#{baseColor}" : defaultColor;
+                    }
+                }
+
+                break;
+            }
+
+            return color;
+        }
+        private string getAbbreviation(String Matchup, int Team, JArray eventsArray)
+        {
+            string abbreviation = "";
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"]?[0]?["competitors"] as JArray;
+                if (competitors == null) continue;
+
+                var team = competitors[Team]["team"];
+                if (team == null) continue;
+
+
+                abbreviation = team["abbreviation"]?.ToString();
+
+
+                break;
+            }
+            return abbreviation;
+        }
         private string getDownDistance(String Matchup, JArray eventsArray)
         {
             string DownDistance = "";
