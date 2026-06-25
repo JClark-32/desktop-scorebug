@@ -17,7 +17,7 @@
         <Image Name="BackgroundBase" HorizontalAlignment="Center" Height="112" VerticalAlignment="Center" Width="1100" 
                Source="/Images/Custom Ticker/Football/TickerCustom-Background.png" RenderTransformOrigin="0,0"/>
         <Image Name="BackGroundTeamColor1" HorizontalAlignment="Center" Height="112" VerticalAlignment="Center" Width="1100"
-               Source="/Images/Custom Ticker/Football/Ticker-TeamBackground 1.png" RenderTransformOrigin="0,0" Loaded="BGColorLoadedL"/>
+               Source="/Images/Custom Ticker/Football/Ticker-TeamBackground 1.png" RenderTransformOrigin="0,0" Loaded="BGColorLoadedL" />
         <Image Name="BackGroundTeamColor2" HorizontalAlignment="Center" Height="112" VerticalAlignment="Center" Width="1100"
                Source="/Images/Custom Ticker/Football/Ticker-TeamBackground 2.png" RenderTransformOrigin="0,0" Loaded="BGColorLoadedR"/>
         <Image Name="BackGroundTeamScoreBar1" HorizontalAlignment="Center" Height="112" VerticalAlignment="Center" Width="1100"

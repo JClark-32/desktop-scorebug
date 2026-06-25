@@ -1,19 +1,21 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Security.Policy;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Net.Http;
-using System.IO;
-using Newtonsoft.Json.Linq;
-using String = System.String;
-using System.Diagnostics;
 using System.Windows.Threading;
-using System.Security.Policy;
 using System.Xml;
-using System.Windows.Controls.Primitives;
+using Newtonsoft.Json.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using Image = System.Windows.Controls.Image;
+using String = System.String;
 
 namespace Desktop_Scorebug_WPF
 {
@@ -39,7 +41,7 @@ namespace Desktop_Scorebug_WPF
         string quarter = "4th";
         //End inputs
 
-        //Text box names
+        //Text boxes
         TextBox team1NameBox;
         TextBox team2NameBox;
         TextBox team1ScoreBox;
@@ -47,7 +49,12 @@ namespace Desktop_Scorebug_WPF
         TextBox gameTimeBox;
         TextBox downsBox;
         TextBox quarterBox;
-        //End names
+        //End text boxes
+
+        Image possessionArrow;
+        bool arrowRightDefault;
+        Thickness arrowRightMargin;
+        Thickness arrowLeftMargin;
 
         XmlDocument ScoreBugConfig = new XmlDocument();
         
@@ -263,6 +270,91 @@ namespace Desktop_Scorebug_WPF
 
                     RootGrid.Children.Add(textBox);
                 }
+                if (type == "possession")
+                {
+                    string name = layer.SelectSingleNode("name").InnerText;
+                    string image = layer.SelectSingleNode("image").InnerText;
+                    string hAlignment = layer.SelectSingleNode("h-alignment").InnerText;
+                    string vAlignment = layer.SelectSingleNode("v-alignment").InnerText;
+                    string startOrientation = layer.SelectSingleNode("startOrientation").InnerText;
+                    int layerHeight = int.Parse(layer.SelectSingleNode("height").InnerText);
+                    int layerWidth = int.Parse(layer.SelectSingleNode("width").InnerText);
+                    string leftMargin = layer.SelectSingleNode("leftMargin").InnerText;
+                    string rightMargin = layer.SelectSingleNode("rightMargin").InnerText;
+                    double opacity = double.Parse(layer.SelectSingleNode("opacity").InnerText);
+                    bool colorTeam1 = bool.Parse(layer.SelectSingleNode("teamColor1").InnerText);
+                    bool colorTeam2 = bool.Parse(layer.SelectSingleNode("teamColor2").InnerText);
+
+                    string[] marginPartsR = rightMargin.Split(',');
+
+                    Thickness rightThickness = new Thickness(
+                        int.Parse(marginPartsR[0]),
+                        int.Parse(marginPartsR[1]),
+                        int.Parse(marginPartsR[2]),
+                        int.Parse(marginPartsR[3]));
+
+                    string[] marginPartsL = leftMargin.Split(',');
+
+                    Thickness leftThickness = new Thickness(
+                        int.Parse(marginPartsL[0]),
+                        int.Parse(marginPartsL[1]),
+                        int.Parse(marginPartsL[2]),
+                        int.Parse(marginPartsL[3]));
+
+                    arrowRightMargin = rightThickness;
+                    arrowLeftMargin = leftThickness;
+
+
+                    Thickness marginThickness;
+
+                    if (startOrientation == "right")
+                    {
+                        arrowRightDefault = true;
+                        marginThickness = rightThickness;
+                    }
+                    else {
+                        arrowRightDefault = false;
+                        marginThickness = leftThickness;
+                    }
+
+
+                    Debug.WriteLine(imageFileBase + image);
+
+                    BitmapImage layerImage = new BitmapImage();
+                    layerImage.BeginInit();
+                    layerImage.UriSource = new Uri(System.IO.Path.GetFullPath(imageFileBase + image), UriKind.Absolute);
+                    layerImage.EndInit();
+
+                    Image imageObject = new Image
+                    {
+                        Name = name,
+                        Source = layerImage,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Height = layerHeight,
+                        Width = layerWidth,
+                        Opacity = opacity,
+                        Margin = marginThickness
+                    };
+
+
+
+                    RootGrid.Children.Add(imageObject);
+
+                    if (colorTeam1)
+                    {
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml("#000DFF");
+                        RecolorImageWithAlpha(imageObject, TeamColor1);
+                    }
+                    if (colorTeam2)
+                    {
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml("#FF0000");
+                        RecolorImageWithAlpha(imageObject, TeamColor1);
+                    }
+
+                    possessionArrow = imageObject;
+
+                }
             }
         }
 
@@ -290,6 +382,86 @@ namespace Desktop_Scorebug_WPF
 
             if (quarterBox != null)
                 quarterBox.Text = newPeriod;
+
+            string team0ID = getTeamID(gameName, 0, events);
+            string team1ID = getTeamID(gameName, 1, events);
+
+            //Debug.WriteLine(team0ID);
+            //Debug.WriteLine(posessionID);
+
+            bool _isFlipped = false;
+
+            if (arrowRightDefault)
+            {
+                if (posessionID.Equals(team1ID))
+                {
+                    possessionArrow.RenderTransform = new ScaleTransform(-1, 1);
+                    possessionArrow.RenderTransformOrigin = new Point(0.5, 0.5);
+                    possessionArrow.Margin = arrowLeftMargin;
+                    _isFlipped = true;
+                }
+                else if (posessionID.Equals(team0ID))
+                {
+                    possessionArrow.Margin = arrowRightMargin;
+                    if (_isFlipped)
+                    {
+                        possessionArrow.RenderTransform = new ScaleTransform(-1, 1);
+                        possessionArrow.RenderTransformOrigin = new Point(0.5, 0.5);
+                    }
+                }
+                else
+                {
+                    possessionArrow.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                if (posessionID.Equals(team1ID))
+                {
+                    possessionArrow.Margin = arrowLeftMargin;
+                    if (_isFlipped)
+                    {
+                        possessionArrow.RenderTransform = new ScaleTransform(-1, 1);
+                        possessionArrow.RenderTransformOrigin = new Point(0.5, 0.5);
+                    }
+                }
+                else if (posessionID.Equals(team0ID))
+                {
+                    possessionArrow.RenderTransform = new ScaleTransform(-1, 1);
+                    possessionArrow.RenderTransformOrigin = new Point(0.5, 0.5);
+                    possessionArrow.Margin = arrowRightMargin;
+                    _isFlipped = true;
+                }
+                else
+                {
+                    possessionArrow.Visibility = Visibility.Hidden;
+                }
+            }
+        }
+
+        private string getTeamID(String Matchup, int Team, JArray eventsArray)
+        {
+            string Id = "";
+
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"]?[0]?["competitors"] as JArray;
+                if (competitors == null) continue;
+
+                var team = competitors[Team]["team"];
+                if (team == null) continue;
+
+
+                Id = team["id"]?.ToString();
+
+
+                break;
+            }
+            return Id;
         }
 
         private async Task<JArray> getEvents(String urlDate, String league)
