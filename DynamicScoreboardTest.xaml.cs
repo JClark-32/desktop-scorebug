@@ -32,13 +32,11 @@ namespace Desktop_Scorebug_WPF
         string league;
 
         //Text box inputs
-        string team1name = "blu";
-        string team2name = "red";
         int team1score = 0;
         int team2score = 0;
-        string gameTime = "12:00";
-        string downs = "2nd and 1";
-        string quarter = "4th";
+        string gameTime = "00:00";
+        string downs = "1st and 10";
+        string quarter = "1st";
         //End inputs
 
         //Text boxes
@@ -101,6 +99,7 @@ namespace Desktop_Scorebug_WPF
 
         private async Task buildScorebugAsync()
         {
+            
             string imageFileBase = "ActiveScorebugs/Football/Default/";
             ScoreBugConfig.Load("ActiveScorebugs/Football/Default/ScorebugConfig.xml");
 
@@ -143,6 +142,8 @@ namespace Desktop_Scorebug_WPF
             Height = BugHeight;
             Width = BugWidth;
 
+            JArray events = await getEvents(urlDate, league);
+
             XmlNode layers = ScoreBugConfig.SelectSingleNode("ScorebugConfig/layers");
 
             foreach (XmlNode layer in layers.ChildNodes)
@@ -183,15 +184,13 @@ namespace Desktop_Scorebug_WPF
                     RootGrid.Children.Add(imageObject);
 
                     if (colorTeam1)
-                    {
-                        JArray Events = await getEvents(urlDate, league);
-                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 1, Events));
+                    {   
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 1, events));
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
                     if (colorTeam2)
                     {
-                        JArray Events = await getEvents(urlDate, league);
-                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 0, Events));
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 0, events));
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
                 }
@@ -239,17 +238,13 @@ namespace Desktop_Scorebug_WPF
                     {
                         if (team == 1)
                         {
-                            JArray Events = await getEvents(urlDate, league);
-                            var teamAbr = getAbbreviation(gameName, 1, Events);
-
+                            var teamAbr = getAbbreviation(gameName, 1, events);
                             textBox.Text = teamAbr;
                             team1NameBox = textBox;
                         }
                         else
-                        {
-                            JArray Events = await getEvents(urlDate, league);
-                            var teamAbr = getAbbreviation(gameName, 0, Events);
-
+                        { 
+                            var teamAbr = getAbbreviation(gameName, 0, events);
                             textBox.Text = teamAbr;
                             team2NameBox = textBox;
                         }
@@ -258,28 +253,28 @@ namespace Desktop_Scorebug_WPF
                     {
                         if (team == 1)
                         {
-                            textBox.Text = team1score.ToString();
+                            textBox.Text = getScore(gameName, 1, events);
                             team1ScoreBox = textBox;
                         }
                         else
                         {
-                            textBox.Text = team2score.ToString();
+                            textBox.Text = getScore(gameName, 0, events);
                             team2ScoreBox = textBox;
                         }
                     }
                     if (content == "clock")
                     {
-                        textBox.Text = gameTime;
+                        textBox.Text = getClock(gameName, events);
                         gameTimeBox = textBox;
                     }
                     if (content == "downs")
                     {
-                        textBox.Text = downs;
+                        textBox.Text = getDownDistance(gameName, events);
                         downsBox = textBox;
                     }
                     if (content == "quarter")
                     {
-                        textBox.Text = quarter;
+                        textBox.Text = await getPeriod(gameName, events);
                         quarterBox = textBox;
                     }
 

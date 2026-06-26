@@ -167,8 +167,8 @@
 			<startOrientation>right</startOrientation>
 			<height>25</height>
 			<width>18</width>
-			<leftMargin>0,65,140,0</leftMargin>
-			<rightMargin>140,65,0,0</rightMargin>
+			<leftMargin>0,68,140,0</leftMargin>
+			<rightMargin>140,68,0,0</rightMargin>
 			<opacity>1</opacity>
 			<teamColor1>False</teamColor1>
 			<teamColor2>False</teamColor2>
