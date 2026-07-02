@@ -21,7 +21,6 @@ namespace Desktop_Scorebug_WPF
 {
     public partial class DynamicScoreboardTest : Scoreboard
     {
-
         bool debugLicencedLogos = true;
 
         public int BugHeight;
@@ -33,12 +32,12 @@ namespace Desktop_Scorebug_WPF
         string gameName;
         string league;
 
-        //Text box inputs
-        int team1score = 0;
-        int team2score = 0;
-        string gameTime = "00:00";
-        string downs = "1st and 10";
-        string quarter = "1st";
+        //Debug text box inputs
+        int debugTeam1score = 0;
+        int debugTeam2score = 0;
+        string debugGameTime = "00:00";
+        string debugDowns = "1st and 10";
+        string debugQuarter = "1st";
         //End inputs
 
         //Text boxes
@@ -56,9 +55,9 @@ namespace Desktop_Scorebug_WPF
         bool arrowRightDefault;
         Thickness arrowRightMargin;
         Thickness arrowLeftMargin;
-        //End Posession arros
+        //End posession arrows
 
-        //Time Outs
+        //Timeouts
         Image TimeOut11;
         Image TimeOut12;
         Image TimeOut13;
@@ -66,6 +65,7 @@ namespace Desktop_Scorebug_WPF
         Image TimeOut21;
         Image TimeOut22;
         Image TimeOut23;
+        //End timeouts
 
         XmlDocument ScoreBugConfig = new XmlDocument();
         
@@ -94,12 +94,12 @@ namespace Desktop_Scorebug_WPF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            buildScorebugAsync();
+            buildScorebug();
             //base.OnContentRendered(e);
             
         }
 
-        private async Task buildScorebugAsync()
+        private async Task buildScorebug()
         {
             
             string imageFileBase = "ActiveScorebugs/Football/Default/";
