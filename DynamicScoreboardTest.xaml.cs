@@ -22,6 +22,8 @@ namespace Desktop_Scorebug_WPF
     public partial class DynamicScoreboardTest : Scoreboard
     {
 
+        bool debugLicencedLogos = true;
+
         public int BugHeight;
         public int BugWidth;
         public VerticalAlignment VAlignment;
@@ -368,6 +370,73 @@ namespace Desktop_Scorebug_WPF
 
                     possessionArrow = imageObject;
 
+                }
+                if (type == "logo")
+                {
+                    string name = layer.SelectSingleNode("name").InnerText;
+                    int team = int.Parse(layer.SelectSingleNode("team").InnerText);
+                    string hAlignment = layer.SelectSingleNode("h-alignment").InnerText;
+                    string vAlignment = layer.SelectSingleNode("v-alignment").InnerText;
+                    int layerHeight = int.Parse(layer.SelectSingleNode("height").InnerText);
+                    int layerWidth = int.Parse(layer.SelectSingleNode("width").InnerText);
+                    string margin = layer.SelectSingleNode("margin").InnerText;
+                    double opacity = double.Parse(layer.SelectSingleNode("opacity").InnerText);
+                    bool colorTeam1 = bool.Parse(layer.SelectSingleNode("teamColor1").InnerText);
+                    bool colorTeam2 = bool.Parse(layer.SelectSingleNode("teamColor2").InnerText);
+
+                    //Debug.WriteLine(imageFileBase + image);
+
+                    string[] marginParts = margin.Split(',');
+
+                    Thickness marginThickness = new Thickness(
+                        int.Parse(marginParts[0]),
+                        int.Parse(marginParts[1]),
+                        int.Parse(marginParts[2]),
+                        int.Parse(marginParts[3]));
+
+                    BitmapImage layerImage = new BitmapImage();
+
+                    if (debugLicencedLogos)
+                    {
+                        if (team == 1)
+                        {
+                            layerImage = await getTeamLogo(gameName, 1, events);
+                        }
+                        else
+                        {
+                            layerImage = await getTeamLogo(gameName, 0, events);
+                        }
+                    }
+
+                    //BitmapImage layerImage = new BitmapImage();
+                    //layerImage.BeginInit();
+                    //layerImage.UriSource = new Uri(System.IO.Path.GetFullPath(imageFileBase + image), UriKind.Absolute);
+                    //layerImage.EndInit();
+
+                    Image imageObject = new Image
+                    {
+                        Name = name,
+                        Source = layerImage,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Height = layerHeight,
+                        Width = layerWidth,
+                        Opacity = opacity,
+                        Margin = marginThickness,
+                    };
+
+                    RootGrid.Children.Add(imageObject);
+
+                    if (colorTeam1)
+                    {
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 1, events));
+                        RecolorImageWithAlpha(imageObject, TeamColor1);
+                    }
+                    if (colorTeam2)
+                    {
+                        var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 0, events));
+                        RecolorImageWithAlpha(imageObject, TeamColor1);
+                    }
                 }
             }
         }
@@ -753,6 +822,44 @@ namespace Desktop_Scorebug_WPF
         {
             //_cts.Cancel();
             base.OnClosed(e);
+        }
+
+        private async Task<BitmapImage> getTeamLogo(String Matchup, int Team, JArray eventsArray)
+        {
+            string logoUrl = "";
+            foreach (JObject eventObj in eventsArray)
+            {
+                string name = eventObj["name"]?.ToString();
+                if (name != Matchup)
+                    continue;
+
+                var competitors = eventObj["competitions"]?[0]?["competitors"] as JArray;
+                if (competitors == null) continue;
+
+                var team = competitors[Team]["team"];
+                if (team == null) continue;
+
+                logoUrl = team["logo"]?.ToString();
+
+                break;
+            }
+            using HttpClient httpClient = new();
+
+            Debug.WriteLine(logoUrl);
+
+            byte[] imageBytes = await httpClient.GetByteArrayAsync(logoUrl);
+
+            BitmapImage fillBitmap = new BitmapImage();
+
+            using (var stream = new MemoryStream(imageBytes))
+            {
+                fillBitmap.BeginInit();
+                fillBitmap.CacheOption = BitmapCacheOption.OnLoad;
+                fillBitmap.StreamSource = stream;
+                fillBitmap.EndInit();
+                fillBitmap.Freeze(); // Optional but useful for threading
+            }
+            return fillBitmap;
         }
     }
 }
