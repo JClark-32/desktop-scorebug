@@ -199,5 +199,20 @@
 			<teamColor1>False</teamColor1>
 			<teamColor2>False</teamColor2>
 		</layer14>
+		<layer15>
+			<type>timeoutArray</type>
+			<name>layer15</name>
+			<team>1</team>
+			<h-alignment>Center</h-alignment>
+			<v-alignment>Center</v-alignment>
+			<activeImage>Ticker-TimeOutActive</activeImage>
+			<lostImage>Ticker-TimeOUtLost</lostImage>
+			<imageHeight>11</imageHeight>
+			<imageWidth>40</imageWidth>
+			<margin>0,0,0,0</margin>
+			<opacity>1</opacity>
+			<teamColor1>False</teamColor1>
+			<teamColor2>False</teamColor2>
+		</layer15>
 	</layers>
 </ScorebugConfig>
