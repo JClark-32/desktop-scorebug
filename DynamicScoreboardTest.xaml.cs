@@ -58,13 +58,16 @@ namespace Desktop_Scorebug_WPF
         //End posession arrows
 
         //Timeouts
-        Image TimeOut11;
-        Image TimeOut12;
-        Image TimeOut13;
+        int team1TimeOuts;
+        int team2TimeOuts;
 
-        Image TimeOut21;
-        Image TimeOut22;
-        Image TimeOut23;
+        Image team1TimeOut1;
+        Image team1TimeOut2;
+        Image team1TimeOut3;
+
+        Image team2TimeOut1;
+        Image team2TimeOut2;
+        Image team2TimeOut3;
         //End timeouts
 
         XmlDocument ScoreBugConfig = new XmlDocument();
@@ -164,6 +167,14 @@ namespace Desktop_Scorebug_WPF
                     bool colorTeam1 = bool.Parse(layer.SelectSingleNode("teamColor1").InnerText);
                     bool colorTeam2 = bool.Parse(layer.SelectSingleNode("teamColor2").InnerText);
 
+                    string[] marginParts = margin.Split(',');
+
+                    Thickness marginThickness = new Thickness(
+                        int.Parse(marginParts[0]),
+                        int.Parse(marginParts[1]),
+                        int.Parse(marginParts[2]),
+                        int.Parse(marginParts[3]));
+
                     Debug.WriteLine(imageFileBase + image);
 
                     BitmapImage layerImage = new BitmapImage();
@@ -180,7 +191,7 @@ namespace Desktop_Scorebug_WPF
                         Height = layerHeight,
                         Width = layerWidth,
                         Opacity = opacity,
-
+                        Margin = marginThickness
                     };
 
                     RootGrid.Children.Add(imageObject);
@@ -437,6 +448,32 @@ namespace Desktop_Scorebug_WPF
                         var TeamColor1 = System.Drawing.ColorTranslator.FromHtml(getTeamColor(gameName, 0, events));
                         RecolorImageWithAlpha(imageObject, TeamColor1);
                     }
+                }
+                if (type == "timeoutArray")
+                {
+                    string name = layer.SelectSingleNode("name").InnerText;
+                    int team = int.Parse(layer.SelectSingleNode("team").InnerText);
+                    string hAlignment = layer.SelectSingleNode("h-alignment").InnerText;
+                    string vAlignment = layer.SelectSingleNode("v-alignment").InnerText;
+                    string activeImage = layer.SelectSingleNode("activeImage").InnerText;
+                    string lostImage = layer.SelectSingleNode("lostImage").InnerText;
+                    int imageHeight = int.Parse(layer.SelectSingleNode("imageHeight").InnerText);
+                    int imageWidth = int.Parse(layer.SelectSingleNode("imageWidth").InnerText);
+                    string margin = layer.SelectSingleNode("margin").InnerText;
+                    double opacity = double.Parse(layer.SelectSingleNode("opacity").InnerText);
+                    bool colorTeam1 = bool.Parse(layer.SelectSingleNode("teamColor1").InnerText);
+                    bool colorTeam2 = bool.Parse(layer.SelectSingleNode("teamColor2").InnerText);
+                    string startEnd = layer.SelectSingleNode("startEnd").InnerText ;
+                    string orientation = layer.SelectSingleNode("orientation").InnerText;
+                    int spacing = int.Parse(layer.SelectSingleNode("spacing").InnerText);
+
+                    string[] marginParts = margin.Split(',');
+
+                    Thickness marginThickness = new Thickness(
+                        int.Parse(marginParts[0]),
+                        int.Parse(marginParts[1]),
+                        int.Parse(marginParts[2]),
+                        int.Parse(marginParts[3]));
                 }
             }
         }
@@ -710,6 +747,7 @@ namespace Desktop_Scorebug_WPF
 
             return color;
         }
+        
         private string getAbbreviation(String Matchup, int Team, JArray eventsArray)
         {
             string abbreviation = "";
@@ -734,6 +772,7 @@ namespace Desktop_Scorebug_WPF
             }
             return abbreviation;
         }
+        
         private string getDownDistance(String Matchup, JArray eventsArray)
         {
             string DownDistance = "";
